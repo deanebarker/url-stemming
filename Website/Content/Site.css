@@ -1,0 +1,22 @@
+﻿input.btn-big-submit {
+    padding: 20px 30px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+div.stemmed-output {
+    margin-top: 6px;
+    font-family: courier new;
+}
+
+select.medium {
+    width: 200px;
+}
+
+input.medium { 
+    width: 300px;
+}
+
+input.large {
+    width: 500px;
+}

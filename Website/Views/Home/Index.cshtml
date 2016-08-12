@@ -1,0 +1,113 @@
+﻿@model Website.Models.EqualityCheckerFormModel
+
+<header>
+    <div class="page-header">
+        <h1>URL Stemmer</h1>
+    </div>
+</header>
+
+<div class="help-block">
+    The goal of stemming is to reduce the variability of text in an attempt to equate on <i>intent</i>, if not actual bytes. Two URLs may be functionally equivalent, even if the actual characters that make them up are different.
+</div>
+
+@if (Model.Compared)
+{
+    var cssClass = Model.AreEqual ? "alert-success" : "alert-danger";
+    var message = Model.AreEqual ? "URLS ARE EQUAL" : "URLS ARE NOT EQUAL";
+    <div class="alert text-center @cssClass"><strong>@message</strong></div>
+}
+
+<form method="post">
+    <div class="row">
+        @{  var width = Model.Compared ? 12 : 10; }
+        <div class="col-md-@width">
+            <div class="form-group">
+                @Html.TextBox("one", Model.One, new { @class = "form-control", placeholder = "URL to Stem" })
+                @if (Model.Submitted)
+            {
+                    @StemmedUrlOutput(Model.OneStemmed);
+            }
+            </div>
+        </div>
+        @if (!Model.Compared)
+            {
+            <div class="col-md-2">
+                <button style="margin-bottom: 10px;" class="btn btn-sm" type="button" data-toggle="collapse" data-target="#comparison-url" aria-expanded="false" aria-controls="collapseExample">
+                    Compare
+                </button>
+            </div>
+        }
+    </div>
+    @{ var collapseClass = Model.Compared ? "" : "collapse"; }
+    <div class="form-group @collapseClass" id="comparison-url">
+        @Html.TextBox("two", Model.Two, new { @class = "form-control", placeholder = "URL to Compare (optional)" })
+        @if (Model.Compared)
+            {
+            @StemmedUrlOutput(Model.TwoStemmed);
+            }
+        <div class="help-block">
+            If input, both URLs will be stemmed with the same settings and compared for equality.
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-default btn-big-submit" value="STEM" />
+    </div>
+
+    <div class="help-block">
+        The settings below are optional and will affect the stemming of the provided URL. The default settings are optimized for equating two URLs for server-based resource identification, not necessarily for browser-based user experience.
+    </div>
+
+    <div class="form-group">
+        <label>Force Domain</label>
+        @Html.TextBox("forceHost", Model.ForceHost, new { @class = "form-control medium" })
+        @Html.CheckBoxFor(m => m.RemoveSubdomain) Remove all subdomains
+        <div class="help-block">
+            The domain of the URL will be replaced by this value (ex: "myofficialdomain.com"). Subdomain removal works with or without forcing a domain.
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Force Protocol</label>
+        @Html.TextBox("forceScheme", Model.ForceScheme, new { @class = "form-control medium" })
+        <div class="help-block">
+            The protocol of the URL will be replaced by this value (ex: "https")
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Trailing Slash</label>
+        @Html.EnumDropDownListFor(m => m.TrailingSlashes, new { @class = "form-control medium" })
+        <div class="help-block">
+            Trailing slashes will be added, removed, or ignored.
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Argument Whitelist</label>
+        @Html.TextBoxFor(m => m.ArgumentWhitelist, new { @class = "form-control large" })
+        <div class="help-block">
+            Only querystring arguments in this comma-delimited list will remain in the URL (ex: "id")
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Argument Blacklist</label>
+        @Html.TextBoxFor(m => m.ArgumentBlacklist, new { @class = "form-control large" })
+        <div class="help-block">
+            Querystring arguments in this comma-delimited list will be removed from the URL (ex: "utm_source")
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.CheckBox("forceLowerCase", Model.ForceLowerCase) Force URL to lowercase
+        <br />
+        @Html.CheckBoxFor(m => m.ReorderQuerystringArgs) Reorder querystring args alphabetically
+        <br />
+        @Html.CheckBoxFor(m => m.RemoveBookmarks) Remove bookmarks
+    </div>
+</form>
+
+@helper StemmedUrlOutput(string url)
+{
+    <div class="alert alert-success stemmed-output">@url</div>
+}
