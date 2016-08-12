@@ -12,9 +12,6 @@ namespace UrlStemming.Core
         {
             // These are reasonable defaults
             TrailingSlashes = TrailingSlashes.Ignore;
-            ReorderQuerystringArgs = true;
-            ForceLowerCase = true;
-            RemoveBookmarks = true;
             ArgumentBlacklist = new List<string>();
             ArgumentWhitelist = new List<string>();
         }
