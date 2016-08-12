@@ -46,5 +46,5 @@ Anything _other than_ these querystring argument keys will be removed from the U
 **TrailingSlashes** (enum)   
 Trailing slashes will be always added, always stripped, or ignored. Defaults to ignore (meaning, slashes will be left as they were passed in).
 
-**ReorderQuerystringArgs** (bool; default: true)   
+**ReorderQuerystringArgs** (bool)   
 Querystring arguments will be reordered alphabetically
