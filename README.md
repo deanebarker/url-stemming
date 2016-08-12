@@ -1,20 +1,50 @@
-# URL Equality
+# URL Stemmer
 
-Given two URLs as strings, create two `NormalizedUrl` objects, then call the `Equals` method on one of them, passing the other one in.
+This utility class attempts to normalize a URL based on provided settings, usually to prepare it for comparison.
 
-    var settings = new UrlEqualitySettings();
-    var a = new NormalizedUrl("http://gadgetopia.com/", settings); 
-    var b = new NormalizedUrl("http://gadgetopia.com/", settings);
+    var stemmedUrl = UrlStemmer.Stem("http://gadgetopia.com");
+	var areTheyEqual = UrlStemmer.Compare("http://gadgetopia.com", "http://www.gadgetopia.com");
 
-	var areTheyTheSame = a.Equals(b);
+When comparing, both URLs are stemmed using the same settings (both URLs are actually stemmed using the same settings, then simply string compared).
 
-The `ToString` method is overridden to show you the normalized result. (If you just want to normalize a URL for storage, just create the object and save the `ToString` result.)
+`UrlStemmer` has a static `UrlStemmingSettings` object which can be changed.
 
-`UrlEqualitySettings` currently has four `boolean` values, all which should be self-explanatory.
+    UrlStemmer.ForceHost = "gadgetopia.com";
+    UrlStemmer.RemoveBookmarks = true;
 
-* IgnoreHost
-* CaseSensitive
-* IgnoreScheme
-* IgnoreTrailingSlash
+If no settings are changed from the defaults, the output of `Stem` should be the same as the input.
 
-Obviously, all initialize to `false`.
+Custom settings objects can be optionally passed into either method:
+
+    var stemmedUrl = UrlStemmer.Stem("http://gadgetopia.com", new UrlStemmingSettings());
+
+If not passed in, the static settings are used.
+
+Available settings on `UrlStemmingSettings`:
+
+**ForceHost** (string)   
+If set, the host (domain) will be changed to this value
+
+**ForceLowerCase** (bool)   
+The URL will be converted to lower-case
+
+**ForceScheme** (string)   
+If set, the scheme (protocol) will be changed to this value
+
+**RemoveBookmarks** (bool)   
+Any bookmarks at the end of the URL will be removed
+
+**RemoveSubdomain** (bool)   
+Any and all subdomains will be removed
+
+**ArgumentBlacklist** (List<string\>)   
+These querystring argument keys will be removed from the URL
+
+**ArgumentWhitelist** (List<string\>)    
+Anything _other than_ these querystring argument keys will be removed from the URL
+
+**TrailingSlashes** (enum)   
+Trailing slashes will be always added, always stripped, or ignored. Defaults to ignore (meaning, slashes will be left as they were passed in).
+
+**ReorderQuerystringArgs** (bool; default: true)   
+Querystring arguments will be reordered alphabetically
