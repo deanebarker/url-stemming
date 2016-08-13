@@ -1,6 +1,6 @@
 # URL Stemmer
 
-This utility class attempts to normalize a URL based on provided settings, usually to prepare it for comparison.
+This utility class attempts to normalize, stem, or simplify a URL based on provided settings, usually to prepare it for comparison or storage.
 
     var stemmedUrl = UrlStemmer.Stem("http://gadgetopia.com");
 	var areTheyEqual = UrlStemmer.Compare("http://gadgetopia.com", "http://www.gadgetopia.com");
@@ -14,9 +14,10 @@ When comparing, both URLs are stemmed using the same settings (both URLs are act
 
 If no settings are changed from the defaults, the output of `Stem` should be the same as the input.
 
-Custom settings objects can be optionally passed into either method:
+Custom settings objects can be optionally passed into either method to override the static settings.
 
-    var stemmedUrl = UrlStemmer.Stem("http://gadgetopia.com", new UrlStemmingSettings());
+    var customSettings = new UrlStemmingSettings() { RemoveBookmarks = true; };
+    var stemmedUrl = UrlStemmer.Stem("http://gadgetopia.com", customSettings);
 
 If not passed in, the static settings are used.
 
@@ -35,7 +36,7 @@ If set, the scheme (protocol) will be changed to this value
 Any bookmarks at the end of the URL will be removed
 
 **RemoveSubdomain** (bool)   
-Any and all subdomains will be removed
+Any (and all) subdomains will be removed
 
 **ArgumentBlacklist** (List<string\>)   
 These querystring argument keys will be removed from the URL
@@ -44,7 +45,50 @@ These querystring argument keys will be removed from the URL
 Anything _other than_ these querystring argument keys will be removed from the URL
 
 **TrailingSlashes** (enum)   
-Trailing slashes will be always added, always stripped, or ignored. Defaults to ignore (meaning, slashes will be left as they were passed in).
+Trailing slashes will be always added, always stripped, or ignored (meaning, slashes will be left as they were passed in).  There is a limitation here (see "Limitations" below), in that you cannot strip the trailing slash if there is no folder path.
 
 **ReorderQuerystringArgs** (bool)   
 Querystring arguments will be reordered alphabetically
+
+## Limitations
+
+Two known limitations, stemming from the `UriBuilder` library class on which parsing is based.
+
+* The URL will always have a path, even if that path is simply a forward slash to represent "root." It is currently not possible to generate a URL like `http://gadgetopia.com` (with no slash on the end).  That URL will always have a forward slash appended to the end, though it is possible to strip forward slashes on the end of folder paths. In the future, this could be potentially overridden with a setting and by trimming the URL as a string immediately before returning it.
+
+* Backslashes in a URL will always be replaced with forward slashes. There is no way to prevent this (though, when normalizing URLs, it's usually desired).
+
+## Examples
+
+Calling `Reset` will replace all settings with a default `UrlStemmingSettings` object.
+
+    String stem;
+
+    UrlStemmer.RemoveSubdomain = true;
+    stem = UrlStemmer.Stem("http://www.gadgetopia.com/");
+    // Result: "http://gadgetopia.com"
+
+    UrlStemmer.Reset();
+    UrlStemmer.ReorderQuerystringArgs = true;
+    UrlStemmer.ArgumentBlacklist.Add("a");
+    stem = UrlStemmer.Stem("http://gadgetopia.com/?e=f&c=d&a=b
+    // Result: "http://gadgetopia.com/?c=d&e=f
+
+    UrlStemmer.Reset()
+    UrlStemmer.RemoveBookmarks = true;
+    UrlStemmer.ForceScheme = "http";
+    UrlStemmer.TrailingSlashes = TrailingSlashes.AlwaysRemove;
+    stem = UrlStemmer.Stem("https://gadgetopia.com/foo/#chapter-1
+    // Result: "http://gadgetopia.com/foo
+
+    UrlStemmer.Reset();
+    UrlStemmer.ForceLowerCase = true;
+    UrlStemmer.ArgumentWhitelist.Add("c");
+    stem = UrlStemmer.Stem("http://gadgetopia.com/FOO/?e=f&c=d&a=b
+    // Result: "http://gadgetopia.com/foo/?c=d
+
+
+## To Do
+
+* We need to account for "double dot" notation. For example: `/my/folder/../path`
+* We need to have a consistent handling of multiple querystring arguments. For example: `?a=b&c=d&a=f`
