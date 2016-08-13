@@ -24,6 +24,6 @@ namespace UrlStemming.Core
         public List<string> ArgumentWhitelist { get; set; }
         public List<string> ArgumentBlacklist { get; set; }
         public TrailingSlashes TrailingSlashes { get; set; }
-        public bool ReorderQuerystringArgs { get; set; }
+        public bool ReorderQuerystringArguments { get; set; }
     }
 }

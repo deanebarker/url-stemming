@@ -58,7 +58,7 @@ namespace Website.Models
                 ForceLowerCase = ForceLowerCase,
                 ForceScheme = ForceScheme,
                 TrailingSlashes = TrailingSlashes,
-                ReorderQuerystringArgs = ReorderQuerystringArgs,
+                ReorderQuerystringArguments = ReorderQuerystringArgs,
                 RemoveBookmarks = RemoveBookmarks,
                 RemoveSubdomain = RemoveSubdomain
             };

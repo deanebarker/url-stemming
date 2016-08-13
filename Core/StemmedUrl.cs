@@ -78,7 +78,7 @@ namespace UrlStemming.Core
             // We're just going to blanket ignore port for the time being
             workingUrl.Port = -1;
 
-            if (settings.ReorderQuerystringArgs)
+            if (settings.ReorderQuerystringArguments)
             {
                 if (!string.IsNullOrWhiteSpace(workingUrl.Query))
                 {
