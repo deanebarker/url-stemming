@@ -45,6 +45,8 @@ namespace Tests
         [TestMethod]
         public void ReorderQuerystringArgs()
         {
+            UrlStemmer.Settings.ReorderQuerystringArguments = true;
+
             var url = "http://www.gadgetopia.com/foo?c=d&a=b";
             Assert.AreEqual("http://www.gadgetopia.com/foo?a=b&c=d", UrlStemmer.Stem(url));
         }
@@ -87,6 +89,8 @@ namespace Tests
         [TestMethod]
         public void RemoveBookmark()
         {
+            UrlStemmer.Settings.RemoveBookmarks = true;
+
             var url = "http://gadgetopia.com/#bookmark";
             Assert.AreEqual("http://gadgetopia.com/", UrlStemmer.Stem(url));
         }
