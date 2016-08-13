@@ -2,24 +2,36 @@
 
 This utility class attempts to normalize, stem, or simplify a URL based on provided settings, usually to prepare it for comparison or storage.
 
-    var stemmedUrl = UrlStemmer.Stem("http://gadgetopia.com");
-	var areTheyEqual = UrlStemmer.Compare("http://gadgetopia.com", "http://www.gadgetopia.com");
+An online tester is located here: [http://url-stemmer.azurewebsites.net/][1].  (The source of this tester is contained in this repository under "Website" folder.)
 
-When comparing, both URLs are stemmed using the same settings (both URLs are actually stemmed using the same settings, then simply string compared).
+[1]: http://url-stemmer.azurewebsites.net/
 
-`UrlStemmer` has a static `UrlStemmingSettings` object which can be changed.
+Basic usage:
 
-    UrlStemmer.ForceHost = "gadgetopia.com";
-    UrlStemmer.RemoveBookmarks = true;
+    UrlStemmer.RemoveSubdomain = true;
+    UrlStemmer.ForceScheme = "http";
+    UrlStemmer.ReorderQuerystringArguments = true:
+    var stemmedUrl = UrlStemmer.Stem("https://www.gadgetopia.com/?c=d&a=b");
+    // Result: "http://gadgetopia.com/?a=b&c=d
 
-If no settings are changed from the defaults, the output of `Stem` should be the same as the input.
+If desired, the `StemmedUrl` class can be created directly:
 
-Custom settings objects can be optionally passed into either method to override the static settings.
+    var url = new StemmedUrl("http://gadgetopia.com");
+    var stem = url.ToString();
+
+`StemmedUrl` overrides `ToString` which always provides the stemmed output of the URL passed into the constructor.
+
+`UrlStemmer` has a static `UrlStemmingSettings` object which is changed to affect how URLs are stemmed.
+
+    UrlStemmer.Settings.ForceHost = "gadgetopia.com";
+    UrlStemmer.Settings.RemoveBookmarks = true;
+
+Stemming will always these static settings to ensure all URLs are stemmed identically. However it is possible to pass a custom settings object into the `Stem` and `Compare` methods, and into the constructor of `StemmedUrl`:
 
     var customSettings = new UrlStemmingSettings() { RemoveBookmarks = true; };
     var stemmedUrl = UrlStemmer.Stem("http://gadgetopia.com", customSettings);
 
-If not passed in, the static settings are used.
+All settings default to a "pass-through" state, meaning that if no settings are changed from the defaults, the output of `Stem` should be the same as the input (with a few built-in exceptions -- see "Limitations" below for some rules that the `UrlBuilder` class imposes on us).
 
 Available settings on `UrlStemmingSettings`:
 
@@ -47,12 +59,12 @@ Anything _other than_ these querystring argument keys will be removed from the U
 **TrailingSlashes** (enum)   
 Trailing slashes will be always added, always stripped, or ignored (meaning, slashes will be left as they were passed in).  There is a limitation here (see "Limitations" below), in that you cannot strip the trailing slash if there is no folder path.
 
-**ReorderQuerystringArgs** (bool)   
+**ReorderQuerystringArguments** (bool)   
 Querystring arguments will be reordered alphabetically
 
 ## Limitations
 
-Two known limitations, stemming from the `UriBuilder` library class on which parsing is based.
+There are two known limitations, stemming from the `UriBuilder` library class on which parsing is based.
 
 * The URL will always have a path, even if that path is simply a forward slash to represent "root." It is currently not possible to generate a URL like `http://gadgetopia.com` (with no slash on the end).  That URL will always have a forward slash appended to the end, though it is possible to strip forward slashes on the end of folder paths. In the future, this could be potentially overridden with a setting and by trimming the URL as a string immediately before returning it.
 
@@ -64,26 +76,26 @@ Calling `Reset` will replace all settings with a default `UrlStemmingSettings` o
 
     String stem;
 
-    UrlStemmer.RemoveSubdomain = true;
+    UrlStemmer.Settings.RemoveSubdomain = true;
     stem = UrlStemmer.Stem("http://www.gadgetopia.com/");
     // Result: "http://gadgetopia.com"
 
     UrlStemmer.Reset();
-    UrlStemmer.ReorderQuerystringArgs = true;
-    UrlStemmer.ArgumentBlacklist.Add("a");
+    UrlStemmer.Settings.ReorderQuerystringArgs = true;
+    UrlStemmer.Settings.ArgumentBlacklist.Add("a");
     stem = UrlStemmer.Stem("http://gadgetopia.com/?e=f&c=d&a=b
     // Result: "http://gadgetopia.com/?c=d&e=f
 
     UrlStemmer.Reset()
-    UrlStemmer.RemoveBookmarks = true;
-    UrlStemmer.ForceScheme = "http";
-    UrlStemmer.TrailingSlashes = TrailingSlashes.AlwaysRemove;
+    UrlStemmer.Settings.RemoveBookmarks = true;
+    UrlStemmer.Settings.ForceScheme = "http";
+    UrlStemmer.Settings.TrailingSlashes = TrailingSlashes.AlwaysRemove;
     stem = UrlStemmer.Stem("https://gadgetopia.com/foo/#chapter-1
     // Result: "http://gadgetopia.com/foo
 
     UrlStemmer.Reset();
-    UrlStemmer.ForceLowerCase = true;
-    UrlStemmer.ArgumentWhitelist.Add("c");
+    UrlStemmer.Settings.ForceLowerCase = true;
+    UrlStemmer.Settings.ArgumentWhitelist.Add("c");
     stem = UrlStemmer.Stem("http://gadgetopia.com/FOO/?e=f&c=d&a=b
     // Result: "http://gadgetopia.com/foo/?c=d
 
