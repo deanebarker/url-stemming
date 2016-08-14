@@ -62,6 +62,9 @@ Trailing slashes will be always added, always stripped, or ignored (meaning, sla
 **ReorderQuerystringArguments** (bool)   
 Querystring arguments will be reordered alphabetically
 
+**RemoveGlobbing** (bool)    
+Double- and single-dot URL segments will be resolved by walking back the parent path when necessary.
+
 ## Limitations
 
 There are two known limitations, stemming from the `UriBuilder` library class on which parsing is based.
