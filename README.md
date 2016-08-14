@@ -8,9 +8,9 @@ An online tester is located here: [http://url-stemmer.azurewebsites.net/][1].  (
 
 Basic usage:
 
-    UrlStemmer.RemoveSubdomain = true;
-    UrlStemmer.ForceScheme = "http";
-    UrlStemmer.ReorderQuerystringArguments = true:
+    UrlStemmer.Settings.RemoveSubdomain = true;
+    UrlStemmer.Settings.ForceScheme = "http";
+    UrlStemmer.Settings.ReorderQuerystringArguments = true:
     var stemmedUrl = UrlStemmer.Stem("https://www.gadgetopia.com/?c=d&a=b");
     // Result: "http://gadgetopia.com/?a=b&c=d
 
