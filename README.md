@@ -72,39 +72,35 @@ There are two known limitations, stemming from the `UriBuilder` library class on
 
 ## Examples
 
-Calling `Reset` will return all settings to the defaults.
+Calling `Reset` will replace all settings with a default `UrlStemmingSettings` object.
 
     String stem;
 
     UrlStemmer.Settings.RemoveSubdomain = true;
     stem = UrlStemmer.Stem("http://www.gadgetopia.com/");
-    // Result: http://gadgetopia.com"
+    // Result: "http://gadgetopia.com"
 
     UrlStemmer.Reset();
     UrlStemmer.Settings.ReorderQuerystringArgs = true;
     UrlStemmer.Settings.ArgumentBlacklist.Add("a");
     stem = UrlStemmer.Stem("http://gadgetopia.com/?e=f&c=d&a=b
-    // Result: http://gadgetopia.com/?c=d&e=f
+    // Result: "http://gadgetopia.com/?c=d&e=f
 
     UrlStemmer.Reset()
     UrlStemmer.Settings.RemoveBookmarks = true;
     UrlStemmer.Settings.ForceScheme = "http";
     UrlStemmer.Settings.TrailingSlashes = TrailingSlashes.AlwaysRemove;
     stem = UrlStemmer.Stem("https://gadgetopia.com/foo/#chapter-1
-    // Result: http://gadgetopia.com/foo
+    // Result: "http://gadgetopia.com/foo
 
     UrlStemmer.Reset();
     UrlStemmer.Settings.ForceLowerCase = true;
     UrlStemmer.Settings.ArgumentWhitelist.Add("c");
     stem = UrlStemmer.Stem("http://gadgetopia.com/FOO/?e=f&c=d&a=b
-    // Result: http://gadgetopia.com/foo/?c=d
-
-    UrlStemmer.Reset();
-    UrlStemmer.Settings.RemoveGlobbing = true;
-    stem = UrlStemmer.Stem("http://gadgetopia.com/1/2/./../3");
-    // Result: http://gadgetopia.com/1/3
+    // Result: "http://gadgetopia.com/foo/?c=d
 
 
 ## To Do
 
+* We need to account for "double dot" notation. For example: `/my/folder/../path`
 * We need to have a consistent handling of multiple querystring arguments. For example: `?a=b&c=d&a=f`

@@ -64,35 +64,6 @@ namespace UrlStemming.Core
             }
 
 
-            if (settings.RemoveGlobbing)
-            {
-                var hasTrailingSlash = workingUrl.Path.EndsWith("/");
-                var segments = new Stack<string>();
-                foreach (var segment in workingUrl.Path.Split("/".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
-                {
-                    if(segment == ".")
-                    {
-                        continue;
-                    }
-                    if (segment == "..")
-                    {
-                        if (segments.Count > 1)
-                        {
-                            segments.Pop();
-                        }
-                        continue;
-                    }
-                    segments.Push(segment);
-                }
-                workingUrl.Path = string.Join("/", segments.Reverse());
-
-                if(hasTrailingSlash)
-                {
-                    workingUrl.Path = string.Concat(workingUrl.Path, "/");
-                }
-            }
-
-
             // Querystring stuff
 
             var existingQuery = HttpUtility.ParseQueryString(workingUrl.Query);
