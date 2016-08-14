@@ -109,6 +109,16 @@ namespace Tests
             Assert.AreEqual("http://gadgetopia/", UrlStemmer.Stem(localUrl));
         }
 
+
+        [TestMethod]
+        public void RemoveGlobbing()
+        {
+            UrlStemmer.Settings.RemoveGlobbing = true;
+
+            var url = "http://gadgetopia.com/1/2/../3";
+            Assert.AreEqual("http://gadgetopia.com/1/3", UrlStemmer.Stem(url));
+        }
+
         [TestInitialize]
         public void TestInitialize()
         {
