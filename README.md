@@ -65,13 +65,15 @@ Querystring arguments will be reordered alphabetically
 **RemoveGlobbing** (bool)    
 Double- and single-dot URL segments will be resolved by walking back the parent path when necessary.
 
-## Limitations
+## Built-in Stemming
 
-There are two known limitations, stemming from the `UriBuilder` library class on which parsing is based.
+`UrlStemmer` uses `UrlBuilder` under the hood, and there are three built-in stemming formats that it imposes which cannot be changed.  However, in most cases, these are acceptable and even desirable.
 
-* The URL will always have a path, even if that path is simply a forward slash to represent "root." It is currently not possible to generate a URL like `http://gadgetopia.com` (with no slash on the end).  That URL will always have a forward slash appended to the end, though it is possible to strip forward slashes on the end of folder paths. In the future, this could be potentially overridden with a setting and by trimming the URL as a string immediately before returning it.
+* The URL will always have a path, even if that path is simply a forward slash to represent "root." It is not possible to generate a URL like `http://gadgetopia.com` (with no slash on the end).
 
-* Backslashes in a URL will always be replaced with forward slashes. There is no way to prevent this (though, when normalizing URLs, it's usually desired).
+* Backslashes in a URL will always be replaced with forward slashes.
+
+* Double- and single dot notation will be removed and normalized. So, a double-dot segment ("/../") meant to climb back up the path will be applied and the URL automatically corrected for it.
 
 ## Examples
 
@@ -105,5 +107,4 @@ Calling `Reset` will replace all settings with a default `UrlStemmingSettings` o
 
 ## To Do
 
-* We need to account for "double dot" notation. For example: `/my/folder/../path`
 * We need to have a consistent handling of multiple querystring arguments. For example: `?a=b&c=d&a=f`
