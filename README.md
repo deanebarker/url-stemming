@@ -62,9 +62,6 @@ Trailing slashes will be always added, always stripped, or ignored (meaning, sla
 **ReorderQuerystringArguments** (bool)   
 Querystring arguments will be reordered alphabetically
 
-**RemoveGlobbing** (bool)    
-Double- and single-dot URL segments will be resolved by walking back the parent path when necessary.
-
 ## Built-in Stemming
 
 `UrlStemmer` uses `UrlBuilder` under the hood, and there are three built-in stemming formats that it imposes which cannot be changed.  However, in most cases, these are acceptable and even desirable.
