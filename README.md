@@ -21,6 +21,14 @@ If desired, the `StemmedUrl` class can be created directly:
 
 `StemmedUrl` overrides `ToString` which always provides the stemmed output of the URL passed into the constructor.
 
+If the URL begins with a leading slash, it's assumed that it's local URL without a domain. The values of `DefaultScheme` and `DefaultHost` will be prepended. If the URL does not begin with a leading slash and does not contain "://", it's assumed that it's an absolute URL with a domain but not scheme. The value of `DefaultScheme` will be prepended. The default values of these settings are `http` and `example.com`.
+
+    UrlStemmer.Stem("/my/path");
+    // Result: http://example.com/my/path
+
+    UrlStemmer.Stem("gadgetopia.com");
+    // Result: http://gadgetopia.com/
+
 `UrlStemmer` has a static `UrlStemmingSettings` object which is changed to affect how URLs are stemmed.
 
     UrlStemmer.Settings.ForceHost = "gadgetopia.com";
@@ -64,7 +72,7 @@ Querystring arguments will be reordered alphabetically
 
 ## Built-in Stemming
 
-`UrlStemmer` uses `UrlBuilder` under the hood, and there are three built-in stemming formats that it imposes which cannot be changed.  However, in most cases, these are acceptable and even desirable.
+`UrlStemmer` uses `UrlBuilder` under the hood, and there are three built-in stemming formats that it imposes which cannot be changed.  However, in most cases, these are acceptable and desirable.
 
 * The URL will always have a path, even if that path is simply a forward slash to represent "root." It is not possible to generate a URL like `http://gadgetopia.com` (with no slash on the end).
 
