@@ -70,6 +70,14 @@ Trailing slashes will be always added, always stripped, or ignored (meaning, sla
 **ReorderQuerystringArguments** (bool)   
 Querystring arguments will be reordered alphabetically
 
+**DefaultHost** (string)   
+The default host prepended to the URL when no host is provided. Defaults to "example.com" as specified in [RFC 2606][2].
+
+**DefaultScheme** (string)   
+The default scheme prepended to the URL when no scheme is provided. Defaults to "http".
+
+[2]: https://tools.ietf.org/html/rfc2606
+
 ## Built-in Stemming
 
 `UrlStemmer` uses `UrlBuilder` under the hood, and there are three built-in stemming formats that it imposes which cannot be changed.  However, in most cases, these are acceptable and desirable.
