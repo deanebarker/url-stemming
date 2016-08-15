@@ -14,6 +14,8 @@ namespace UrlStemming.Core
             TrailingSlashes = TrailingSlashes.Ignore;
             ArgumentBlacklist = new List<string>();
             ArgumentWhitelist = new List<string>();
+            DefaultHost = "example.com";
+            DefaultScheme = "http";
         }
 
         public string ForceHost { get; set; }
@@ -25,5 +27,7 @@ namespace UrlStemming.Core
         public List<string> ArgumentBlacklist { get; set; }
         public TrailingSlashes TrailingSlashes { get; set; }
         public bool ReorderQuerystringArguments { get; set; }
+        public string DefaultHost { get; set; }
+        public string DefaultScheme { get; set; }
     }
 }

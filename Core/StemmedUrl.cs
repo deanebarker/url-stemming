@@ -19,6 +19,18 @@ namespace UrlStemming.Core
 
             // Pre-parse
 
+            // If the URL starts with a slash, we're assuming it's a relative URL from root
+            if(url.StartsWith("/"))
+            {
+                url = string.Concat(settings.DefaultScheme, "://", settings.DefaultHost, url);
+            }
+
+            // If the URL doesn't have "://" and doesn't start with a slash, then it's a domain and URL with no scheme
+            if(!url.Contains("://"))
+            {
+                url = string.Concat(settings.DefaultScheme, "://", url);
+            }
+
             if (settings.ForceLowerCase)
             {
                 url = url.ToLower();

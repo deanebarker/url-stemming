@@ -8,7 +8,7 @@ namespace Tests
     public class Core
     {
         [TestMethod]
-        public void Equal()
+        public void PassThrough()
         {
             // There should be no change here
             var url = "http://gadgetopia.com/";
@@ -107,6 +107,20 @@ namespace Tests
             Assert.AreEqual("http://gadgetopia.com/", UrlStemmer.Stem(urlWithSubdomain));
             Assert.AreEqual("http://gadgetopia.com/", UrlStemmer.Stem(urlWithoutSubdomain));
             Assert.AreEqual("http://gadgetopia/", UrlStemmer.Stem(localUrl));
+        }
+
+        [TestMethod]
+        public void DefaultHost()
+        {
+            var url = "/my/path";
+            Assert.AreEqual("http://example.com/my/path", UrlStemmer.Stem(url));
+        }
+
+        [TestMethod]
+        public void DefaultScheme()
+        {
+            var url = "gadgetopia.com";
+            Assert.AreEqual("http://gadgetopia.com/", UrlStemmer.Stem(url));
         }
 
         [TestInitialize]
