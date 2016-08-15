@@ -97,6 +97,14 @@ namespace UrlStemming.Core
 
         }
 
+        public Uri Uri
+        {
+            get
+            {
+                return workingUrl.Uri;
+            }
+        }
+
         private bool HasValue(string value)
         {
             return !string.IsNullOrWhiteSpace(value);
