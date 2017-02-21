@@ -76,7 +76,7 @@ The default host prepended to the URL when no host is provided. Defaults to "exa
 **DefaultScheme** (string)   
 The default scheme prepended to the URL when no scheme is provided. Defaults to "http".
 
-**EncodingBehavior** (enum: None, Decode, Encode)
+**EncodingBehavior** (enum: None, Decode, Encode)     
 Whether and how to encode or decode "%" encoded URL characters. Defaults to "None," which passes the URL through.
 
 [2]: https://tools.ietf.org/html/rfc2606
