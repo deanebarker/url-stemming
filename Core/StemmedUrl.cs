@@ -36,6 +36,16 @@ namespace UrlStemming.Core
                 url = url.ToLower();
             }
 
+            if(settings.EncodingBehavior == EncodingBehavior.Encode)
+            {
+                url = HttpUtility.UrlEncode(url);
+            }
+
+            if (settings.EncodingBehavior == EncodingBehavior.Decode)
+            {
+                url = HttpUtility.UrlDecode(url);
+            }
+
             workingUrl = new UriBuilder(url);
 
 

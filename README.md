@@ -10,7 +10,7 @@ Basic usage:
 
     UrlStemmer.Settings.RemoveSubdomain = true;
     UrlStemmer.Settings.ForceScheme = "http";
-    UrlStemmer.Settings.ReorderQuerystringArguments = true:
+    UrlStemmer.Settings.ReorderQuerystringArguments = true;
     var stemmedUrl = UrlStemmer.Stem("https://www.gadgetopia.com/?c=d&a=b");
     // Result: "http://gadgetopia.com/?a=b&c=d
 
@@ -39,7 +39,7 @@ Stemming will always these static settings to ensure all URLs are stemmed identi
     var customSettings = new UrlStemmingSettings() { RemoveBookmarks = true; };
     var stemmedUrl = UrlStemmer.Stem("http://gadgetopia.com", customSettings);
 
-All settings default to a "pass-through" state, meaning that if no settings are changed from the defaults, the output of `Stem` should be the same as the input (with a few built-in exceptions -- see "Limitations" below for some rules that the `UrlBuilder` class imposes on us).
+All settings default to a "pass-through" state, meaning that if no settings are changed from the defaults, the output of `Stem` should be the same as the input (with a few built-in exceptions -- see "Built-in Stemming" below for some rules that the `UrlBuilder` class imposes on us).
 
 Available settings on `UrlStemmingSettings`:
 
@@ -65,7 +65,7 @@ These querystring argument keys will be removed from the URL
 Anything _other than_ these querystring argument keys will be removed from the URL
 
 **TrailingSlashes** (enum)   
-Trailing slashes will be always added, always stripped, or ignored (meaning, slashes will be left as they were passed in).  There is a limitation here (see "Limitations" below), in that you cannot strip the trailing slash if there is no folder path.
+Trailing slashes will be always added, always stripped, or ignored (meaning, slashes will be left as they were passed in).  There is a limitation here (see "Built-in Stemming" below), in that you cannot strip the trailing slash if there is no folder path.
 
 **ReorderQuerystringArguments** (bool)   
 Querystring arguments will be reordered alphabetically
@@ -75,6 +75,9 @@ The default host prepended to the URL when no host is provided. Defaults to "exa
 
 **DefaultScheme** (string)   
 The default scheme prepended to the URL when no scheme is provided. Defaults to "http".
+
+**EncodingBehavior** (enum: None, Decode, Encode)
+Whether and how to encode or decode "%" encoded URL characters. Defaults to "None," which passes the URL through.
 
 [2]: https://tools.ietf.org/html/rfc2606
 
@@ -86,7 +89,7 @@ The default scheme prepended to the URL when no scheme is provided. Defaults to 
 
 * Backslashes in a URL will always be replaced with forward slashes.
 
-* Double- and single dot notation will be removed and normalized. So, a double-dot segment ("/../") meant to climb back up the path will be applied and the URL automatically corrected for it.
+* Double- and single dot notation ("parent pathing") will be removed and normalized. So, a double-dot segment (`/../`) meant to climb back up the path will be applied and the URL automatically corrected for it. (`/foo/../bar/./baz` becomes `/bar/baz`)
 
 ## Examples
 

@@ -16,6 +16,7 @@ namespace UrlStemming.Core
             ArgumentWhitelist = new List<string>();
             DefaultHost = "example.com";
             DefaultScheme = "http";
+            EncodingBehavior = EncodingBehavior.None;
         }
 
         public string ForceHost { get; set; }
@@ -29,5 +30,13 @@ namespace UrlStemming.Core
         public bool ReorderQuerystringArguments { get; set; }
         public string DefaultHost { get; set; }
         public string DefaultScheme { get; set; }
+        public EncodingBehavior EncodingBehavior { get; set; }
+    }
+
+    public enum EncodingBehavior
+    {
+        None,
+        Encode,
+        Decode
     }
 }
