@@ -49,9 +49,12 @@ namespace UrlStemming.Core
             workingUrl = new UriBuilder(url);
 
 
-            // Post-parse
+			// Post-parse
 
-            if(settings.RemoveBookmarks)
+			// We're just going to blanket ignore port for the time being
+			workingUrl.Port = -1;
+
+			if (settings.RemoveBookmarks)
             {
                 workingUrl.Fragment = null;
             }
@@ -90,30 +93,36 @@ namespace UrlStemming.Core
 
             var existingQuery = HttpUtility.ParseQueryString(workingUrl.Query);
 
-            if (settings.ArgumentWhitelist.Any())
-            {
-                existingQuery.AllKeys.Where(x => !settings.ArgumentWhitelist.Contains(x)).ToList().ForEach(y => existingQuery.Remove(y));
-            }
+			if (settings.ClearQuerystring)
+			{
+				existingQuery.Clear();
+			}
+			else
+			{
+				// This only matters if we're NOT clearly the querystring
 
-            settings.ArgumentBlacklist.ForEach(x => existingQuery.Remove(x));
+				if (settings.ArgumentWhitelist.Any())
+				{
+					existingQuery.AllKeys.Where(x => !settings.ArgumentWhitelist.Contains(x)).ToList().ForEach(y => existingQuery.Remove(y));
+				}
 
-            // We're just going to blanket ignore port for the time being
-            workingUrl.Port = -1;
+				settings.ArgumentBlacklist.ForEach(x => existingQuery.Remove(x));
 
-            if (settings.ReorderQuerystringArguments)
-            {
-                if (!string.IsNullOrWhiteSpace(workingUrl.Query))
-                {
-                    var keys = existingQuery.AllKeys;
-                    Array.Sort(keys);
-                    foreach (var key in keys)
-                    {
-                        var value = existingQuery[key];
-                        existingQuery.Remove(key);
-                        existingQuery.Add(key, value);
-                    }
-                }
-            }
+				if (settings.ReorderQuerystringArguments)
+				{
+					if (!string.IsNullOrWhiteSpace(workingUrl.Query))
+					{
+						var keys = existingQuery.AllKeys;
+						Array.Sort(keys);
+						foreach (var key in keys)
+						{
+							var value = existingQuery[key];
+							existingQuery.Remove(key);
+							existingQuery.Add(key, value);
+						}
+					}
+				}
+			}
 
             workingUrl.Query = existingQuery.ToString();
 

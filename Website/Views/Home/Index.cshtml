@@ -101,7 +101,9 @@
     <div class="form-group">
         @Html.CheckBox("forceLowerCase", Model.ForceLowerCase) Force URL to lowercase
         <br />
-        @Html.CheckBoxFor(m => m.ReorderQuerystringArgs) Reorder querystring args alphabetically
+		@Html.CheckBoxFor(m => m.ReorderQuerystringArgs) Reorder querystring args alphabetically
+		<br />
+		@Html.CheckBoxFor(m => m.ClearQuerystring) Clear querystring
         <br />
         @Html.CheckBoxFor(m => m.RemoveBookmarks) Remove bookmarks
     </div>

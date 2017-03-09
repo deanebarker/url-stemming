@@ -16,6 +16,7 @@ namespace Website.Models
             TrailingSlashes = TrailingSlashes.Ignore;
             ForceLowerCase = true;
             RemoveBookmarks = true;
+			ClearQuerystring = false;
 
             // These need to be set because we try to split them...
             ArgumentBlacklist = string.Empty;
@@ -47,20 +48,22 @@ namespace Website.Models
         public bool RemoveSubdomain { get; set; }
         public TrailingSlashes TrailingSlashes { get; set; }
         public bool ReorderQuerystringArgs { get; set; }
+        public bool ClearQuerystring { get; set; }
         public string ArgumentWhitelist { get; set; }
         public string ArgumentBlacklist { get; set; }
 
         public UrlStemmingSettings GetSettings()
         {
-            var settings = new UrlStemmingSettings()
-            {
-                ForceHost = ForceHost,
-                ForceLowerCase = ForceLowerCase,
-                ForceScheme = ForceScheme,
-                TrailingSlashes = TrailingSlashes,
-                ReorderQuerystringArguments = ReorderQuerystringArgs,
-                RemoveBookmarks = RemoveBookmarks,
-                RemoveSubdomain = RemoveSubdomain
+			var settings = new UrlStemmingSettings()
+			{
+				ForceHost = ForceHost,
+				ForceLowerCase = ForceLowerCase,
+				ForceScheme = ForceScheme,
+				TrailingSlashes = TrailingSlashes,
+				ReorderQuerystringArguments = ReorderQuerystringArgs,
+				RemoveBookmarks = RemoveBookmarks,
+				RemoveSubdomain = RemoveSubdomain,
+				ClearQuerystring = ClearQuerystring
             };
 
             if (!string.IsNullOrWhiteSpace(ArgumentWhitelist))

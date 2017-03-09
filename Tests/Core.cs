@@ -123,7 +123,15 @@ namespace Tests
             Assert.AreEqual("http://gadgetopia.com/", UrlStemmer.Stem(url));
         }
 
-        [TestInitialize]
+		[TestMethod]
+		public void ClearQuerystring()
+		{
+			var url = "http://gadgetopia.com?a=b";
+			UrlStemmer.Settings.ClearQuerystring = true;
+			Assert.AreEqual("http://gadgetopia.com/", UrlStemmer.Stem(url));
+		}
+
+		[TestInitialize]
         public void TestInitialize()
         {
             UrlStemmer.Reset();

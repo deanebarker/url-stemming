@@ -58,17 +58,20 @@ Any bookmarks at the end of the URL will be removed
 **RemoveSubdomain** (bool)   
 Any (and all) subdomains will be removed
 
+**ReorderQuerystringArguments** (bool)   
+Querystring arguments will be reordered alphabetically
+
 **ArgumentBlacklist** (List<string\>)   
 These querystring argument keys will be removed from the URL
 
 **ArgumentWhitelist** (List<string\>)    
 Anything _other than_ these querystring argument keys will be removed from the URL
 
+**ClearQuerystring** (bool)     
+Will remove _all_ querystring arguments. (Setting this flag will make any ArgumentWhitelist, ArgumentBlacklist, and ReorderQuerystringArguments a moot point. They will simply be ignored.)
+
 **TrailingSlashes** (enum)   
 Trailing slashes will be always added, always stripped, or ignored (meaning, slashes will be left as they were passed in).  There is a limitation here (see "Built-in Stemming" below), in that you cannot strip the trailing slash if there is no folder path.
-
-**ReorderQuerystringArguments** (bool)   
-Querystring arguments will be reordered alphabetically
 
 **DefaultHost** (string)   
 The default host prepended to the URL when no host is provided. Defaults to "example.com" as specified in [RFC 2606][2].
@@ -78,6 +81,7 @@ The default scheme prepended to the URL when no scheme is provided. Defaults to 
 
 **EncodingBehavior** (enum: None, Decode, Encode)     
 Whether and how to encode or decode "%" encoded URL characters. Defaults to "None," which passes the URL through.
+
 
 [2]: https://tools.ietf.org/html/rfc2606
 

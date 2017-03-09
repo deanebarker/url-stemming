@@ -31,6 +31,7 @@ namespace UrlStemming.Core
         public string DefaultHost { get; set; }
         public string DefaultScheme { get; set; }
         public EncodingBehavior EncodingBehavior { get; set; }
+		public bool ClearQuerystring { get; set; }
     }
 
     public enum EncodingBehavior
