@@ -52,6 +52,9 @@ The URL will be converted to lower-case
 **ForceScheme** (string)   
 If set, the scheme (protocol) will be changed to this value
 
+**ForcePort** (int)   
+If left at 0 (the default), this will leave the port unchanged. If set to -1, this will always remove the port. If set to any positive value, it will change the port to that value.
+
 **RemoveBookmarks** (bool)   
 Any bookmarks at the end of the URL will be removed
 
