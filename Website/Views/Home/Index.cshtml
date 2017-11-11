@@ -98,6 +98,15 @@
         </div>
     </div>
 
+
+    <div class="form-group">
+        <label>Force Port</label>
+        @Html.TextBoxFor(m => m.ForcePort, new { @class = "form-control small" })
+        <div class="help-block">
+           Setting to -1 will always remove the port. Setting to 0 (the default) will leave the port unchanged. Setting any positive value will force the port to that value. 
+        </div>
+    </div>
+
     <div class="form-group">
         @Html.CheckBox("forceLowerCase", Model.ForceLowerCase) Force URL to lowercase
         <br />

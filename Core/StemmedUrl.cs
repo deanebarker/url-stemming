@@ -49,10 +49,12 @@ namespace UrlStemming.Core
             workingUrl = new UriBuilder(url);
 
 
-			// Post-parse
+            // Post-parse
 
-			// We're just going to blanket ignore port for the time being
-			workingUrl.Port = -1;
+            if (settings.ForcePort != 0)
+            {
+                workingUrl.Port = settings.ForcePort;
+            }
 
 			if (settings.RemoveBookmarks)
             {
