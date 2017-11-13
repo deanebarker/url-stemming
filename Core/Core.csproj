@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -47,12 +50,21 @@
     <Compile Include="UrlStemmer.cs" />
     <Compile Include="UrlStemmingSettings.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="UrlStemming.nuspec" />
+    <None Include="packages.config" />
+    <None Include="packageTools.targets" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <PropertyGroup>
+    <SolutionDir>$(ProjectDir)</SolutionDir>
+  </PropertyGroup>
+  <!-- This holds the version of the package -->
+  <Import Project="$(ProjectDir)\UrlStemming.Version.targets" />
+  <!--Pack-->
+  <Import Project="$(ProjectDir)\packageTools.targets" />
+  <Target Name="CreateNugetPackage" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' ">
+    <!-- Create the package -->
+    <Exec Command="$(NugetCommand)" />
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
