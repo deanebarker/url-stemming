@@ -51,6 +51,7 @@
     <Compile Include="UrlStemmingSettings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="msbuild\BuildProject.proj" />
     <None Include="UrlStemming.nuspec" />
     <None Include="packages.config" />
     <None Include="packageTools.targets" />
@@ -59,9 +60,8 @@
   <PropertyGroup>
     <SolutionDir>$(ProjectDir)</SolutionDir>
   </PropertyGroup>
-  <!-- This holds the version of the package -->
-  <Import Project="$(ProjectDir)\UrlStemming.Version.targets" />
-  <!--Pack-->
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="$(SolutionDir)\Core\msbuild\BuildProject.proj" />
   <Import Project="$(ProjectDir)\packageTools.targets" />
   <Target Name="CreateNugetPackage" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' ">
     <!-- Create the package -->
