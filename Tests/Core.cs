@@ -39,6 +39,7 @@ namespace Tests
             var url = "http://gadgetopia.com/";
 
             UrlStemmer.Settings.ForceScheme = "https";
+            UrlStemmer.Settings.ForcePort = -1; // Removes the port, since it would still be "80"
             Assert.AreEqual("https://gadgetopia.com/", UrlStemmer.Stem(url));
         }
 
@@ -131,7 +132,37 @@ namespace Tests
 			Assert.AreEqual("http://gadgetopia.com/", UrlStemmer.Stem(url));
 		}
 
-		[TestInitialize]
+        [TestMethod]
+        public void Forceport()
+        {
+            var url = "http://gadgetopia.com:8080";
+
+            // Forcing to 80 should remove it
+            UrlStemmer.Settings.ForcePort = 80;
+            Assert.AreEqual("http://gadgetopia.com/", UrlStemmer.Stem(url));
+
+            // Forcing to anything else should change it
+            UrlStemmer.Settings.ForcePort = 1234;
+            Assert.AreEqual("http://gadgetopia.com:1234/", UrlStemmer.Stem(url));
+
+            // Forcing to something when original has no port, should add it
+            url = "http://gadgetopia.com";
+            UrlStemmer.Settings.ForcePort = 6789;
+            Assert.AreEqual("http://gadgetopia.com:6789/", UrlStemmer.Stem(url));
+
+            // Not forcing, should leave it alone
+            url = "http://gadgetopia.com:8080";
+            UrlStemmer.Settings.ForcePort = 0;
+            Assert.AreEqual("http://gadgetopia.com:8080/", UrlStemmer.Stem(url));
+
+            // Setting to -1 should remove it
+            url = "http://gadgetopia.com:8080";
+            UrlStemmer.Settings.ForcePort = -1;
+            Assert.AreEqual("http://gadgetopia.com/", UrlStemmer.Stem(url));
+        }
+
+
+        [TestInitialize]
         public void TestInitialize()
         {
             UrlStemmer.Reset();

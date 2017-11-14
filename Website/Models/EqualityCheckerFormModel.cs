@@ -17,6 +17,7 @@ namespace Website.Models
             ForceLowerCase = true;
             RemoveBookmarks = true;
 			ClearQuerystring = false;
+            ForcePort = 0;
 
             // These need to be set because we try to split them...
             ArgumentBlacklist = string.Empty;
@@ -52,6 +53,9 @@ namespace Website.Models
         public string ArgumentWhitelist { get; set; }
         public string ArgumentBlacklist { get; set; }
 
+        [RegularExpression(@"^-?[0-9]\d*(\.\d+)?$")]
+        public int ForcePort { get; set; }
+
         public UrlStemmingSettings GetSettings()
         {
 			var settings = new UrlStemmingSettings()
@@ -63,7 +67,8 @@ namespace Website.Models
 				ReorderQuerystringArguments = ReorderQuerystringArgs,
 				RemoveBookmarks = RemoveBookmarks,
 				RemoveSubdomain = RemoveSubdomain,
-				ClearQuerystring = ClearQuerystring
+				ClearQuerystring = ClearQuerystring,
+                ForcePort = ForcePort
             };
 
             if (!string.IsNullOrWhiteSpace(ArgumentWhitelist))

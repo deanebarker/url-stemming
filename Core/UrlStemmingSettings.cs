@@ -40,6 +40,8 @@ namespace UrlStemming.Core
         public EncodingBehavior EncodingBehavior { get; set; }
 
         public bool ClearQuerystring { get; set; }
+
+        public int ForcePort { get; set; }
     }
 
     public enum EncodingBehavior
