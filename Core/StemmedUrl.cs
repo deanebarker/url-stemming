@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace UrlStemming.Core
@@ -16,17 +12,16 @@ namespace UrlStemming.Core
         {
             settings = settings ?? UrlStemmer.Settings;
 
-
             // Pre-parse
 
             // If the URL starts with a slash, we're assuming it's a relative URL from root
-            if(url.StartsWith("/"))
+            if (url.StartsWith("/"))
             {
                 url = string.Concat(settings.DefaultScheme, "://", settings.DefaultHost, url);
             }
 
             // If the URL doesn't have "://" and doesn't start with a slash, then it's a domain and URL with no scheme
-            if(!url.Contains("://"))
+            if (!url.Contains("://"))
             {
                 url = string.Concat(settings.DefaultScheme, "://", url);
             }
@@ -36,7 +31,7 @@ namespace UrlStemming.Core
                 url = url.ToLower();
             }
 
-            if(settings.EncodingBehavior == EncodingBehavior.Encode)
+            if (settings.EncodingBehavior == EncodingBehavior.Encode)
             {
                 url = HttpUtility.UrlEncode(url);
             }
@@ -48,7 +43,6 @@ namespace UrlStemming.Core
 
             workingUrl = new UriBuilder(url);
 
-
             // Post-parse
 
             if (settings.ForcePort != 0)
@@ -56,15 +50,15 @@ namespace UrlStemming.Core
                 workingUrl.Port = settings.ForcePort;
             }
 
-			if (settings.RemoveBookmarks)
+            if (settings.RemoveBookmarks)
             {
                 workingUrl.Fragment = null;
             }
 
-            if(settings.RemoveSubdomain)
+            if (settings.RemoveSubdomain)
             {
                 var domainSegments = workingUrl.Host.Split(".".ToCharArray());
-                if(domainSegments.Count() > 2)
+                if (domainSegments.Count() > 2)
                 {
                     workingUrl.Host = string.Join(".", domainSegments.Skip(Math.Max(0, domainSegments.Count() - 2)));
                 }
@@ -75,12 +69,12 @@ namespace UrlStemming.Core
                 workingUrl.Path = workingUrl.Path.TrimEnd("/".ToCharArray());
             }
 
-            if(settings.TrailingSlashes == TrailingSlashes.AlwaysAdd)
+            if (settings.TrailingSlashes == TrailingSlashes.AlwaysAdd)
             {
-                workingUrl.Path = string.Concat(workingUrl.Path.TrimEnd("/".ToCharArray()), "/"); 
+                workingUrl.Path = string.Concat(workingUrl.Path.TrimEnd("/".ToCharArray()), "/");
             }
-            
-            if(HasValue(settings.ForceScheme))
+
+            if (HasValue(settings.ForceScheme))
             {
                 workingUrl.Scheme = settings.ForceScheme;
             }
@@ -90,44 +84,42 @@ namespace UrlStemming.Core
                 workingUrl.Host = settings.ForceHost;
             }
 
-
             // Querystring stuff
 
             var existingQuery = HttpUtility.ParseQueryString(workingUrl.Query);
 
-			if (settings.ClearQuerystring)
-			{
-				existingQuery.Clear();
-			}
-			else
-			{
-				// This only matters if we're NOT clearly the querystring
+            if (settings.ClearQuerystring)
+            {
+                existingQuery.Clear();
+            }
+            else
+            {
+                // This only matters if we're NOT clearly the querystring
 
-				if (settings.ArgumentWhitelist.Any())
-				{
-					existingQuery.AllKeys.Where(x => !settings.ArgumentWhitelist.Contains(x)).ToList().ForEach(y => existingQuery.Remove(y));
-				}
+                if (settings.ArgumentWhitelist.Any())
+                {
+                    existingQuery.AllKeys.Where(x => !settings.ArgumentWhitelist.Contains(x)).ToList().ForEach(y => existingQuery.Remove(y));
+                }
 
-				settings.ArgumentBlacklist.ForEach(x => existingQuery.Remove(x));
+                settings.ArgumentBlacklist.ForEach(x => existingQuery.Remove(x));
 
-				if (settings.ReorderQuerystringArguments)
-				{
-					if (!string.IsNullOrWhiteSpace(workingUrl.Query))
-					{
-						var keys = existingQuery.AllKeys;
-						Array.Sort(keys);
-						foreach (var key in keys)
-						{
-							var value = existingQuery[key];
-							existingQuery.Remove(key);
-							existingQuery.Add(key, value);
-						}
-					}
-				}
-			}
+                if (settings.ReorderQuerystringArguments)
+                {
+                    if (HasValue(workingUrl.Query))
+                    {
+                        var keys = existingQuery.AllKeys;
+                        Array.Sort(keys);
+                        foreach (var key in keys)
+                        {
+                            var value = existingQuery[key];
+                            existingQuery.Remove(key);
+                            existingQuery.Add(key, value);
+                        }
+                    }
+                }
+            }
 
             workingUrl.Query = existingQuery.ToString();
-
         }
 
         public Uri Uri
@@ -138,10 +130,7 @@ namespace UrlStemming.Core
             }
         }
 
-        private bool HasValue(string value)
-        {
-            return !string.IsNullOrWhiteSpace(value);
-        }
+        private bool HasValue(string value) => !string.IsNullOrWhiteSpace(value);
 
         public override string ToString()
         {
@@ -155,13 +144,16 @@ namespace UrlStemming.Core
 
         public override bool Equals(object obj)
         {
-            if(!(obj is StemmedUrl))
+            if (!(obj is StemmedUrl))
             {
                 return false;
             }
             return ToString() == ((StemmedUrl)obj).ToString();
         }
 
-        public static implicit operator string(StemmedUrl url) { return url != null ? url.ToString() : string.Empty; }
+        public static implicit operator string(StemmedUrl url)
+        {
+            return url != null ? url.ToString() : string.Empty;
+        }
     }
 }

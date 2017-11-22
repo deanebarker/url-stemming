@@ -54,17 +54,14 @@
     <None Include="msbuild\BuildProject.proj" />
     <None Include="UrlStemming.nuspec" />
     <None Include="packages.config" />
-    <None Include="packageTools.targets" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <SolutionDir>$(ProjectDir)</SolutionDir>
-  </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Import Project="$(SolutionDir)\Core\msbuild\BuildProject.proj" />
-  <Import Project="$(ProjectDir)\packageTools.targets" />
-  <Target Name="CreateNugetPackage" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' ">
-    <!-- Create the package -->
-    <Exec Command="$(NugetCommand)" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
 </Project>
